@@ -5,7 +5,11 @@ const cors=require('cors')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(cors())
+app.use(cors({
+    origin:['https://full-stack-abusunaina.vercel.app/'],
+    methods:['POST','GET'],
+    credentials:true
+}))
 
 app.route('/').get((req,res)=>{
     res.json({meassge:"HELLO WORLD"})
