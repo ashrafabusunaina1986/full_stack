@@ -1,0 +1,17 @@
+.button{
+    border: none;
+    padding: 10px 15px ;
+    margin: 20px auto;
+    box-shadow: 0 4px 10px #333;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 16px;font-weight: bold;
+    background:linear-gradient(to top ,#ddbe9a,#5c5046);
+}
+.button:hover{
+    box-shadow: 0 4px 10px #555;
+    background:linear-gradient(to top,#5c5046 ,#ddbe9a);
+}
+.button:active{
+    box-shadow: 0 8px 10px #333;
+}
