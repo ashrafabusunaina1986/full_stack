@@ -5,7 +5,7 @@ import Card from '../../UI/Card/Card';
 import useHttp from '../../costum-hook/usehttp/use-http';
 import classes from'./users.module.css'
 
-const Users = () => {
+const Users = (props) => {
     const [post, setPost] = useState([])
     const { isLoading, reqError, sendRequest: getData } = useHttp()
   
@@ -21,6 +21,8 @@ const Users = () => {
         {reqError && <p>{reqError}</p>}
         {post.length > 0 && <h1>Number posts:{post.length}</h1>}
         {post.length > 0 && post.map(item => {
+          if(item.name.includes(props.input) || item.name.trim().length===0){
+        
           return <Card key={item.id}>
             <h2>USER:{item.id}</h2>
             <div className={classes.users}>
@@ -54,6 +56,7 @@ const Users = () => {
             </div>
 
           </Card>
+          }
         })}
       </Card>
     </Fragment>
