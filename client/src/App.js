@@ -5,23 +5,28 @@ import Input from './components/Input/Input';
 import Card from './UI/Card/Card';
 import Users from './components/user/Users';
 import { useState } from 'react';
+import Textarea from './components/Textarea/Textarea';
+import useForm from './costum-hook/useform/use-form';
 
 
 function App() {
-  const [user,setUser]=useState({input:'',out:''})
+  
+  const init=useForm(
+    [
+    { title:'Name', id: 'name', type: 'text', name:"input"},
+    { title:'Price', id: 'price', type: 'number', name:"input"},
+    { title:'Message', id: 'message',  name:"textarea"},
+    { id:"button",children:"Click",name:"button"}
+  ]
+  )
 
-  const searchHandler=()=>{
-  setUser({...user,out:user.input})
-  }
+  
   return (
-    <div className='App'>
-      <Input title='Name' input={{
-        id: 'name', type: 'text', placeholder: 'enter the name.',
-        value:`${user.input}`,
-        onChange:(e)=>setUser({...user,input:e.target.value})
-      }} />
-      <Button onClick={searchHandler}>Click for send request</Button>
-      <Users input={user.out}/>
+    <div className='App f'>
+      {init.form()}
+        
+      
+      {/* <Users input={user.out}/> */}
     </div>
   );
 }

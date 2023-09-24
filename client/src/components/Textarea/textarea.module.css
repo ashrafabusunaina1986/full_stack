@@ -1,4 +1,4 @@
-.input {
+.textarea{
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -6,18 +6,17 @@
     margin: 10px auto;
     gap: 5px;
 }
-
-.input label {
-    width: max-content;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.input input {
+.textarea textarea{
     width: 90%;
+    height:30vh ;
     resize: none;
     border: none;
     box-shadow: 0 0 3px 1px #777;
-    padding: 10px 15px;
+    padding: 10px 15px ;
     border-radius: 10px;
+}
+.textarea label{
+    width: max-content;
+    font-size: 14px;
+    font-weight: bold;
 }

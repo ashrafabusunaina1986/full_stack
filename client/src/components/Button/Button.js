@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import classes from './button.module.css'
 
 const Button = (props) => {
   return (
-    <button className={classes.button}
-    onClick={props.onClick}
-    >
+    <Fragment>
+      <button className={classes.button}
+        onClick={props.onClick}
+        {...props.input}
+      >
         {props.children}
-    </button>
+      </button>
+    </Fragment>
+
   )
 }
 
