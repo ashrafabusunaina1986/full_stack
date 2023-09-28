@@ -13,6 +13,14 @@
     font-weight: bold;
 }
 
+.errorlabel{
+    color:red
+}
+.errorinput{
+    background-color: #faa;
+    border: 1px solid #f55;
+}
+
 .input input {
     width: 90%;
     resize: none;
