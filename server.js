@@ -3,9 +3,13 @@ const app=express()
 
 const cors=require('cors')
 
+var post_data=require('./routes/postData')
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
+
+app.use(post_data)
 
 app.route('/').get((req,res)=>{
     res.json({meassge:"HELLO WORLD"})

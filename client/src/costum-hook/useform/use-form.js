@@ -1,9 +1,14 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Input from '../../components/Input/Input'
 import Textarea from '../../components/Textarea/Textarea'
 import Button from '../../components/Button/Button'
+import classes from './useform.module.css'
+import useHttp from '../usehttp/use-http'
 
 const useForm = (elements) => {
+    const { isLoading, reqError, sendRequest: save } = useHttp()
+    const [post, setPost] = useState(null)
+    const [is, setis] = useState(false)
     const init = (number = false) => {
         const variavles = {}
         if (!elements) return null
@@ -20,85 +25,120 @@ const useForm = (elements) => {
     const [errorValue, setErrorValue] = useState(init)
 
     const signvalue = e => {
-        const error = {}
+        setis(false)
         const { id, value, type, nodeName } = e.target
         if (nodeName === 'INPUT') {
             if (type === 'number') {
 
-                if (value < 1) {
+                setEntry({
+                    ...entry, [id]: Number(value)
+                })
+                if (Number(value) < 1) {
                     setErrorValue({
                         ...errorValue, [id]: `please enter ${id} >0`
-                    })
-                    setEntry({
-                        ...entry, [id]: 1
                     })
                 } else {
                     setErrorValue({
                         ...errorValue, [id]: ``
-                    })
-                    setEntry({
-                        ...entry, [id]: Number(value)
                     })
                 }
             }
             if (type === 'text') {
 
+                setEntry({
+                    ...entry, [id]: value
+                })
                 if (value.trim().length < 3) {
                     setErrorValue({
                         ...errorValue, [id]: `please enter ${id} > 2 letter`
                     })
-                    setEntry({
-                        ...entry, [id]: ''
-                    })
                 } else {
                     setErrorValue({
                         ...errorValue, [id]: ``
-                    })
-                    setEntry({
-                        ...entry, [id]: value
                     })
                 }
             }
         }
         if (nodeName === 'TEXTAREA') {
 
+            setEntry({
+                ...entry, [id]: value
+            })
             if (value.trim().length < 20) {
                 setErrorValue({
                     ...errorValue, [id]: `please enter ${id} > 19 letter`
                 })
-                setEntry({
-                    ...entry, [id]: ''
-                })
             } else {
                 setErrorValue({
                     ...errorValue, [id]: ``
-                })
-                setEntry({
-                    ...entry, [id]: value
                 })
             }
         }
     }
 
     const sendSubmitHandler = e => {
+        setis(true)
         e.preventDefault()
-        let numError=0
-        Object.keys(errorValue).map(error=>{
-            console.log(error)
-            if(errorValue[error].trim().length>0){
-                numError+=1
+        const error = {}
+        Object.keys(entry).map(item => {
+            const it = entry[item]
+            if (typeof it === 'number') {
+                if (it < 1) {
+                    error[`${item}`] = `please enter ${item} >0`
+                }
+            }
+            if (typeof it === 'string') {
+                if (item === 'name' && it.trim().length < 3) {
+                    error[`${item}`] = `please enter ${item} > 2 letter`
+                }
+                if (item === 'message' && it.trim().length < 20) {
+                    error[`${item}`] = `please enter ${item} > 19 letter`
+                }
             }
         })
-        console.log(numError)
-        if(numError>0){
-            console.log('found errors')
-        }else{
-            console.log(entry, errorValue)
-        }
-        
+        setErrorValue(error)
     }
+    useEffect(() => {
+        let numError = 0
+        Object.keys(errorValue).map(error => {
+            if (errorValue[error].trim().length > 0) {
+                numError += 1
+            }
+        })
+        console.log(numError, entry)
+        if (numError > 0) {
+            return console.log('found errors')
+        }
+        if (entry.name === '' || entry.price === 0 || entry.message === '') {
+            return
+        }
+
+        save({
+            url: 'http://localhost:4011/post_data',
+            method: "POST",
+            body: entry,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, setPost)
+        setEntry(init)
+
+    }, [is])
     const form = () => {
-        return <form onSubmit={sendSubmitHandler}>
+        let errorNum = 0
+        Object.keys(errorValue).map(item => {
+            if (errorValue[item] !== '') {
+                errorNum += 1
+            }
+        })
+        return <form onSubmit={sendSubmitHandler} className={classes.form}>
+            {errorNum > 0 && <div className={classes.errors}>
+                {
+                    Object.keys(errorValue).map((item, ind) => {
+                        return errorValue[item] && <p key={ind}>{errorValue[item]} </p>
+                    })
+                }
+            </div>}
             {!elements && <div></div>}
             {elements && elements.map((element, ind) => {
                 if (element.name === 'input') {
@@ -107,7 +147,8 @@ const useForm = (elements) => {
                             input={{
                                 id: element.id,
                                 type: element.type,
-                                onChange: (e) => signvalue(e)
+                                onChange: (e) => signvalue(e),
+                                value:entry[element.id]===0?'':entry[element.id]
                             }} />
                     </Fragment>
                 }
@@ -116,22 +157,21 @@ const useForm = (elements) => {
                         <Textarea title={element.title}
                             input={{
                                 id: element.id,
-                                onChange: (e) => signvalue(e)
+                                onChange: (e) => signvalue(e),
+                                value:entry[element.id]
                             }}
                         />
                     </Fragment>
                 }
-                if (element.name === "button") {
-                    return <Fragment key={ind}>
-                        <Button input={{
-                            id: element.id
-                        }} >{element.children}</Button>
-                    </Fragment>
-                }
+
+
             })}
+            <Fragment >
+                <Button  >Click</Button>
+            </Fragment>
         </form>
     }
-    return { errorValue, entry, form }
+    return { errorValue, post, form }
 }
 
 export default useForm

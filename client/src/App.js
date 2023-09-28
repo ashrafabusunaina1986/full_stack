@@ -7,6 +7,7 @@ import Users from './components/user/Users';
 import { useState } from 'react';
 import Textarea from './components/Textarea/Textarea';
 import useForm from './costum-hook/useform/use-form';
+import useHttp from './costum-hook/usehttp/use-http';
 
 
 function App() {
@@ -15,10 +16,12 @@ function App() {
     [
     { title:'Name', id: 'name', type: 'text', name:"input"},
     { title:'Price', id: 'price', type: 'number', name:"input"},
-    { title:'Message', id: 'message',  name:"textarea"},
-    { id:"button",children:"Click",name:"button"}
+    { title:'Message', id: 'message',  name:"textarea"}
   ]
   )
+  // const http=useHttp({
+  //   url:
+  // })
 
   
   return (
@@ -26,7 +29,15 @@ function App() {
       {init.form()}
         
       
-      {/* <Users input={user.out}/> */}
+      {
+        init.post && <div>
+          {init.post.map(item=>{
+            return <div key={item.id}>
+              {item.name}
+            </div>
+          })}
+        </div>
+      }
     </div>
   );
 }
