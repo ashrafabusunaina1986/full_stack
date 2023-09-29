@@ -2,6 +2,7 @@ const router=require('express').Router()
 const d=require('../public/data.json')
 const path=require('path')
 const fs=require('fs')
+const id=require('uuid')
 
 router.route('/post_data').post((req,res)=>{
    const filename=path.join(__dirname,'../public/data.json')
@@ -10,7 +11,7 @@ router.route('/post_data').post((req,res)=>{
     //     return res.json({body:req.body})
     // }else{
         d.push({
-            id:d.length,
+            id:id.v4(),
             name:name,
             price:price,
             message:message
@@ -18,7 +19,7 @@ router.route('/post_data').post((req,res)=>{
         if(fs.existsSync(filename)){
             try {
                 fs.writeFileSync(filename,JSON.stringify(d,null,2),'utf-8')
-                return res.json(d).status(200)    
+                return res.json({message:"post saved"}).status(200)    
             } catch (error) {
                 return res.json(error).status(404)
             }

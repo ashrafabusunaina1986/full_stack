@@ -105,9 +105,8 @@ const useForm = (elements) => {
                 numError += 1
             }
         })
-        console.log(numError, entry)
         if (numError > 0) {
-            return console.log('found errors')
+            return 
         }
         if (entry.name === '' || entry.price === 0 || entry.message === '') {
             return

@@ -37,3 +37,14 @@
     transform: rotate(360deg);
   }
 }
+.info{
+  display: flex;
+  text-align: left;
+  gap: 200px;
+  padding: 10px 20px;
+}
+.info p{
+  font-size: 14px;
+  font-weight: bold;
+  text-align: justify;
+}
