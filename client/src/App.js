@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     getInfo({
-      url: `http://localhost:4011/getinfo`
+      url: `http://localhost:5000/getinfo`
     }, setInfo)
   }, [init.post])
 
